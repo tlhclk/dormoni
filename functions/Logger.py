@@ -43,7 +43,8 @@ class LoggerMiddleware(MiddlewareMixin, ObjectFunc):
 		obj = get_object_or_404(UserIpModel,ip_address=ip_address)
 		if obj.permission:
 			return True
-		return False
+		return True
+		#return False
 	
 	def process_response(self, request, response):
 		ip = request.META["REMOTE_ADDR"]
