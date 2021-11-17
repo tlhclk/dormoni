@@ -1,0 +1,66 @@
+{% load TemplateFuncs %}
+<nav class="mt-2" id="id_sidebar">
+    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="true" id="id_sidebar_menu">
+        {% for title,path_list in path_menu.items %}
+            {% if path_list.0.type_id.id == 8 %}
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon {{ path_list.0.app_id.sidebar_icon }}"></i>
+                        <p>{{ title }}
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        {% for path in path_list %}
+                            <li class="nav-item">
+                                <a href="{{ path.path }}" class="nav-link">
+                                    <i class="nav-icon {{ path.icon_code }}"></i>
+                                    <p>{{ path.title}}</p>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon {{ path_list.0.type_id.icon_code }}"></i>
+                        <p>{{ title }}
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        {% for path in path_list %}
+                            <li class="nav-item">
+                                <a href="{{ path.path }}" class="nav-link">
+                                    <i class="nav-icon {{ path.icon_code }}"></i>
+                                    <p>{{ path.title}}</p>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endif %}
+        {% endfor %}
+        {% for title,table_list in table_menu.items %}
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-university"></i>
+                    <p>{{ title }}
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    {% for table in table_list %}
+                        <li class="nav-item">
+                            <a href="{% url "global_list" table.name %}" class="nav-link">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>{{ table.list_title}}</p>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</nav>

@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static TemplateFuncs %}
+{% block page_content %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+        			{% GetDetailPagination request %}
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#" class="btn btn-outline-secondary" data-toggle="modal" data-target="#form_NoteModel_modal">Not Ekle</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'global_create' table_name %}" class="btn btn-outline-secondary">Yeni Ekle</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'global_update' table_name object.id %}" class="btn btn-outline-secondary">Bilgiyi Düzenle</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'global_delete' table_name object.id %}" class="btn btn-outline-secondary">Bilgiyi Sil</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'global_list' table_name %}" class="btn btn-outline-secondary">Tüm Tablo</a></li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-8" style="column-count: 2;">
+            {% for field in fields %}
+                <div class="row" style="display: flex" id="{{ field.name }}">
+                    <span style="flex: 1"><strong>{{ field.verbose_name }}:</strong> </span>
+                    <span style="flex: 1">{{ object|GetAttrValue:field|safe }}</span>
+                </div>
+            {% endfor %}
+          </div>
+          <div class="col-4">
+            {% for field in related_fields %}
+                <div class="row" id="{{ field.table_id.name }}">
+                    <div class="col-xl-12">
+                        <strong><a href="{% url 'global_list' field.table_id.name %}?{{ field.name }}_id={{ object.id }}" class="show_all">{{ field.table_id.verbose_name_plural }}</a></strong>
+                        <a href="{% url 'global_create' field.table_id.name  %}?{{ field.name }}={{ object.id }}" id="add_{{ field.table_id.name }}" class="add_item"> <i class="fa fa-plus"></i></a>
+                    </div>
+                    <div class="col-xl-12">
+                        <ul>
+                            {% for obj in object|GetRelatedAttrValue:field %}
+                                <a href="{% url 'global_detail' field.table_id.name obj.id %}"><li>{{ obj }}</li></a>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div>
+            {% GetNotes request %}
+        </div>
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+  </section>
+
+
+{% endblock %}
+{% block modal_content %}
+    <div class="modal fade" id="form_NoteModel_modal" aria-modal="true" role="dialog" aria-hidden="true" aria-labelledby="form_NoteModel_modal_header">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="form_NoteModel_modal_header">Not Formu</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% GetNoteForm %}
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" onClick="PostNoteForm()">Kaydet</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+{% endblock %}
+{% block more_stylesheet %}
+{% endblock  %}
+{% block more_script %}
+<script>
+    var table_name=window.location.pathname.split("/")[2];
+    var primary_key=window.location.pathname.split("/")[3];
+    var table_object={};
+    $.ajax({
+        url: "/list/TableModel/?name="+table_name,
+        contentType: "application/json",
+        dataType: 'json',
+        method: "GET",
+        type: "GET",
+        success: function(result){
+            table_object=result["results"][0];
+        }
+    });
+    function PostNoteForm(){
+        var form_dict={}
+        var element_list=document.querySelectorAll("#form_NoteModel input");
+        for (var i=0; i<element_list.length; i++){
+            var element = element_list[i];
+            var name = element.name;
+            var value = element.value;
+            if (name != "csrfmiddlewaretoken" && value != "" && value!= -1){
+                form_dict[name]=value
+            }
+        }
+        var csrftoken=getCookie("csrftoken")
+        $.ajax({
+            url: "/list/NoteModel/",
+            contentType: "application/json",
+            headers: {'X-CSRF-TOKEN': csrftoken},
+            dataType: 'json',
+            method: "POST",
+            type: "POST",
+            data: JSON.stringify(form_dict),
+            success: function(note_result){
+                    console.log(note_result)
+                if ("error" in note_result) {
+                    AlertError(note_result["error"]);
+                }
+                else {
+                    $.ajax({
+                        url: "/list/NoteRecordModel/",
+                        contentType: "application/json",
+                        headers: {'X-CSRF-TOKEN': csrftoken},
+                        dataType: 'json',
+                        method: "POST",
+                        type: "POST",
+                        data: JSON.stringify({"note_id":note_result["id"],"table_id":table_object.id,"primary_key":primary_key}),
+                        success: function(noterecord_result){
+                            if ("error" in noterecord_result) {
+                                AlertError(noterecord_result["error"]);
+                            }
+                            else {
+                                var note_detail= document.getElementById("detail_NoteModel");
+                                var elem=document.createElement("div");
+                                elem.setAttribute("class","row");
+                                elem.setAttribute("style","display:flex");
+                                elem.setAttribute("id","id_"+note_result["id"]);
+                                var elem1 = document.createElement("span");
+                                elem1.setAttribute("style","flex:1");
+                                var elem11 = document.createElement("strong");
+                                elem11.innerHTML="Note "+note_result["id"]+":"
+                                elem1.appendChild(elem11);
+                                var elem2 = document.createElement("span");
+                                elem2.setAttribute("style","flex:1");
+                                elem2.innerHTML=note_result["name"]+" > "+note_result["note"];
+                                var elem21=document.createElement("br");
+                                elem2.appendChild(elem21);
+                                elem2.innerHTML+=note_result["desc"];
+                                elem.appendChild(elem1);
+                                elem.appendChild(elem2);
+                                note_detail.appendChild(elem);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+{% endblock %}

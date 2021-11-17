@@ -1,0 +1,36 @@
+{% load TemplateFuncs %}
+
+<div class="dataTables_paginate paging_simple_numbers" id="id_table_pagination">
+    <ul class="pagination">
+        {% if first_page != 0 %}
+            <li class="paginate_button page-item previous">
+                <a href="{% url 'global_list' table_name %}?page={{ first_page }}" aria-controls="table_pagination" tabindex="0" class="page-link">İlk
+                </a>
+            </li>
+        {% endif %}
+        {% if prev_page != 0 %}
+            <li class="paginate_button page-item previous">
+                <a href="{% url 'global_list' table_name %}?page={{ prev_page }}" aria-controls="table_pagination" tabindex="0" class="page-link">Önceki
+                </a>
+            </li>
+        {% endif %}
+        {% for page_no in page_list %}
+            <li class="paginate_button page-item{% if page_no == cur_page %} disabled active{% endif %}" id="">
+                <a href="{% url 'global_list' table_name %}?page={{ page_no }}" aria-controls="table_pagination" tabindex="0" class="page-link">{{ page_no }}
+                </a>
+            </li>
+        {% endfor %}
+        {% if next_page != 0 %}
+            <li class="paginate_button page-item next">
+                <a href="{% url 'global_list' table_name %}?page={{ next_page }}" aria-controls="table_pagination"  tabindex="0" class="page-link">Sonraki
+                </a>
+            </li>
+        {% endif %}
+        {% if last_page != 0 %}
+            <li class="paginate_button page-item next">
+                <a href="{% url 'global_list' table_name %}?page={{ last_page }}" aria-controls="table_pagination"  tabindex="0" class="page-link">Son
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</div>

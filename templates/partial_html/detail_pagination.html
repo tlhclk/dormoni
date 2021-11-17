@@ -1,0 +1,22 @@
+{% load TemplateFuncs %}
+
+<div class="dataTables_paginate paging_simple_numbers" id="id_detail_pagination">
+    <ul class="pagination">
+        {% if prev_obj != 0 %}
+            <li class="paginate_button page-item previous">
+                <a href="{% url "global_detail" table_name prev_obj %}" aria-controls="detail_pagination" tabindex="0" class="page-link">Önceki
+                </a>
+            </li>
+        {% endif %}
+        <li class="paginate_button page-item disabled active" id="">
+            <a href="{% url "global_detail" table_name primary_key %}" aria-controls="detail_pagination" tabindex="0" class="page-link">{{ primary_key }}
+            </a>
+        </li>
+        {% if next_obj != 0 %}
+            <li class="paginate_button page-item next">
+                <a href="{% url "global_detail" table_name next_obj %}" aria-controls="detail_pagination"  tabindex="0" class="page-link">Sonraki
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</div>

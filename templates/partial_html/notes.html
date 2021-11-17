@@ -1,0 +1,10 @@
+{% load TemplateFuncs %}
+
+<div class="col-12" style="column-count: 3;" id="detail_NoteModel">
+    {% for note_record in note_list %}
+        <div class="row" style="display: flex" id="id_{{ note_record.id }}">
+            <span style="flex: 1"><strong>Note {{ note_record.id }}:</strong> </span>
+            <span style="flex: 1">{{ note_record.note_id.name|safe }} > {{ note_record.note_id.note|safe }}<br> {{ note_record.note_id.desc }}</span>
+        </div>
+    {% endfor %}
+</div>
