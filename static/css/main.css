@@ -1,0 +1,17 @@
+body {
+    /* element */
+}
+.navbar{
+    /* class */
+    
+}
+#navbar{
+    /* id */
+}
+#id_title{
+    color: black;
+    font-size: 30px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}

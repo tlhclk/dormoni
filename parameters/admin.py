@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
-### import_part
 from django.contrib import admin
-from .models import ContinentModel,CountryModel,CityModel,TownModel,CardTypeModel,ChangePurposeModel,RepetitiveTypeModel,CorporationTypeModel,MarketModel,EmailTypeModel,EventTypeModel,GenderModel,MediaTypeModel,PeriodModel,PhoneTypeModel,RelationTypeModel,SchoolTypeModel,SeriesDownloadModel,GenreModel,SeriesStateModel,SeriesTypeModel,FinancialCategoryModel,TransactionTypeModel,OperationTypeModel,AppTypeModel,PathTypeModel,ClothesTypeModel,CarClassModel,CarTypeModel,CarFuelTypeModel,CarUsageModel,FunctionTypeModel
-
-
-### admin_part
+from .models import ContinentModel, CountryModel, CityModel, TownModel, CardTypeModel, ChangePurposeModel, RepetitiveTypeModel, CorporationTypeModel, MarketModel, EmailTypeModel, EventTypeModel, GenderModel, MediaTypeModel, PeriodModel, PhoneTypeModel, RelationTypeModel, SchoolTypeModel, SeriesDownloadModel, GenreModel, SeriesStateModel, SeriesTypeModel, FinancialCategoryModel, TransactionTypeModel, OperationTypeModel, AppTypeModel, PathTypeModel, ClothesTypeModel, CarClassModel, CarTypeModel, CarFuelTypeModel, CarUsageModel, FunctionTypeModel
 admin.site.register(ContinentModel)
 admin.site.register(CountryModel)
 admin.site.register(CityModel)

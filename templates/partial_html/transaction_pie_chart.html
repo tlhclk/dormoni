@@ -1,0 +1,19 @@
+{% load TemplateFuncs %}
+
+<div class="card card-danger">
+    <div class="card-header">
+      <h3 class="card-title">{{ report_title }}</h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+          <i class="fas fa-minus"></i>
+        </button>
+        <button type="button" class="btn btn-tool" data-card-widget="remove">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div class="card-body" data-table_name="{{ table_name }}" data-date_interval ="{{ date_interval }}" data-date_count ="{{ date_count }}" data-text_field ="{{ text_field }}" data-value_field ="{{ value_field }}" data-date_field ="{{ date_field }}" data-type_id ="{{ type_id }}">
+        <canvas id="report_{{ table_name }}_{{ text_field }}" class="report" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+    </div>
+    <!-- /.card-body -->
+</div>

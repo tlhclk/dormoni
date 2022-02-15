@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
-### import_part
 from django.contrib import admin
-from .models import DepartmentModel,CorporationModel,PeopleGroupModel,SchoolModel,TaskSchedulerModel
-
-
-### admin_part
+from .models import DepartmentModel, CorporationModel, PeopleGroupModel, SchoolModel, TaskSchedulerModel
 admin.site.register(DepartmentModel)
 admin.site.register(CorporationModel)
 admin.site.register(PeopleGroupModel)

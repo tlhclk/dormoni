@@ -2,9 +2,11 @@
 
 <form method="post" class="user" id="form_NoteModel">
     <div class="card-body">
-        <input type="hidden" name="csrfmiddlewaretoken" value="TpYn7RFHJiBgTDUantgEBlk55Zmhsh0d9jqh6Ms3DhB9pbJ9SK8Q6FzaCWiAHeYR">
+        {% csrf_token %}
+        <p><label for="id_name">Adı:</label> <input type="text" name="name" maxlength="100" class="form-control" id="id_name"></p>
         <p><label for="id_note">Not:</label> <input type="text" name="note" maxlength="50" class="form-control" id="id_note"></p>
         <p><label for="id_desc">Açıklama:</label> <input type="text" name="desc" maxlength="500" class="form-control" id="id_desc"></p>
-        <p><label for="id_name">Adı:</label> <input type="text" name="name" maxlength="100" class="form-control" id="id_name"></p>
+        <input type="hidden" name="table_name" maxlength="100" class="form-control" id="id_table_name">
+        <input type="hidden" name="primary_key" maxlength="50" class="form-control" id="id_primary_key">
     </div>
 </form>

@@ -1,7 +1,53 @@
 {% extends "base.html" %}
-{% load static %}
-{% block 'page_content' %}
-
-
-
+{% load static TemplateFuncs %}
+{% block page_content %}
+<div class="row">
+    <div class="col-6">
+        {% GetReport request 'account_balance' %}
+    </div>
+    <div class="col-6">
+        {% GetReport request 'transaction_account_balance_weekly_inyear' %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+        {% GetReport request 'transaction_account_amount_monthly' %}
+    </div>
+    <div class="col-4">
+        {% GetReport request 'transaction_category_amount_monthly' %}
+    </div>
+    <div class="col-4">
+        {% GetReport request 'transaction_corporation_amount_monthly' %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+        {% GetReport request 'transaction_account_amount_yearly' %}
+    </div>
+    <div class="col-4">
+        {% GetReport request 'transaction_category_amount_yearly' %}
+    </div>
+    <div class="col-4">
+        {% GetReport request 'transaction_corporation_amount_yearly' %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        {% GetReport request 'transaction_account_amount_monthly_inyear' %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        {% GetReport request 'transaction_category_amount_monthly_inyear' %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        {% GetReport request 'transaction_corporation_amount_monthly_inyear' %}
+    </div>
+</div>
+{% endblock %}
+{% block more_script %}
+<script src="{% static '/lte_source/plugins/chart.js/Chart.min.js' %}"></script>
+<script src="{% static '/js/reports.js' %}"></script>
 {% endblock %}

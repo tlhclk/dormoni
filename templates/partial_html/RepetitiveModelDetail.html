@@ -1,0 +1,27 @@
+{% load TemplateFuncs %}
+<div class="row">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th style="width: 13%;">Başlangıç Tarihi</th>
+                <th style="width: 13%;">Bitiş Tarihi</th>
+                <th style="width: 12%;">SonÖdeme Tarihi</th>
+                <th style="width: 12%;">Miktarı</th>
+                <th style="width: 50%;">Durumu</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in payment_data %}
+                <tr ondblclick="RepetitiveDoubleClick(this)" data-id="{{ data.id }}">
+                    <td>{{ data.start_date }}</td>
+                    <td>{{ data.end_date }}</td>
+                    <td>{{ data.last_date }}</td>
+                    <td>{{ data.amount }}</td>
+                    <td><input id="id_repetitivetransaction_{{ data.id }}" type="text" name="repetitivetransaction_{{ data.id }}" class="ion-rangeslider" value=""
+                        min_value="{{ min_value }}" max_value="{{ max_value }}" from_value="{{ data.from_value }}" to_value="{{ data.to_value }}" ></td>
+                </tr>
+            {% endfor %}
+            
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,75 @@
+{% load TemplateFuncs %}
+<div class="row">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Hesap</th>
+                <th>Verilen Miktar</th>
+                <th>Alınan Miktar</th>
+                <th>Durum</th>
+                <th>Bitiş Durumu</th>
+                <th>Bitiş Oranı</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key,data in payment_data.items %}
+                {% if key != "sum" %}
+                    <tr>
+                        <td>{{ data.str }}</td>
+                        <td>{{ data.paid }}</td>
+                        <td>{{ data.unpaid }}</td>
+                        <td>{{ data.balance }}</td>
+                        {% if data.paid > data.unpaid %}
+                            <td>
+                                <div class="progress progress-xs progress-striped active">
+                                    <div class="progress-bar bg-success" style="width: {{ data.rate }}%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-success">{{ data.rate }}%</span>
+                            </td>
+                        {% else %}
+                            <td>
+                                <div class="progress progress-xs progress-striped active">
+                                    <div class="progress-bar bg-danger" style="width: {{ data.rate }}%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-danger">{{ data.rate }}%</span>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            {% for key,data in payment_data.items %}
+                {% if key == "sum" %}
+                    <tr>
+                        <td>{{ data.str }}</td>
+                        <td>{{ data.paid }}</td>
+                        <td>{{ data.unpaid }}</td>
+                        <td>{{ data.balance }}</td>
+                        {% if data.paid > data.unpaid %}
+                            <td>
+                                <div class="progress progress-xs progress-striped active">
+                                    <div class="progress-bar bg-success" style="width: {{ data.rate }}%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-success">{{ data.rate }}%</span>
+                            </td>
+                        {% else %}
+                            <td>
+                                <div class="progress progress-xs progress-striped active">
+                                    <div class="progress-bar bg-danger" style="width: {{ data.rate }}%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-danger">{{ data.rate }}%</span>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,20 @@
+#id_title{
+    color: black;
+    font-size: 30px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.irs-bar {
+    background-color: green!important;
+}
+.irs-handle i {
+    background-color: green!important;
+}
+.irs-single {
+    background-color: green!important;
+}
+.irs-single:before{
+    border-top-color: green!important;
+}

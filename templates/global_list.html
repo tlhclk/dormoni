@@ -6,10 +6,15 @@
 	<section class="content-header">
 		<div class="container-fluid">
 			<div class="row mb-2">
-				<div class="col-sm-6">
-        			{% GetTablePagination request %}
+				<div class="col-xl-4">
+					{% GetTablePagination request %}
 				</div>
-				<div class="col-sm-6">
+				<div class="col-xl-4"> 	
+					<div class="input-group input-group-sm" style="width: %100;">
+						<input type="text" name="search_text" class="form-control float-right" placeholder="Arama" id="search_text">
+					</div>
+				</div>
+				<div class="col-xl-4">
 					<ol class="breadcrumb float-sm-right">
 						<li class="breadcrumb-item"><a href="{% url 'global_create' table_name %}" class="btn btn-outline-secondary">Yeni Ekle</a></li>
 					</ol>
@@ -20,7 +25,7 @@
 
 
 	<!-- Main content -->
-    <section class="content">
+	<section class="content">
 		<div class="container-fluid">
 		  <div class="row">
 			<div class="col-12">
@@ -95,5 +100,19 @@
 	$('.row-link').dblclick(function() {
 		window.location = this.getAttribute("href")
 	});
+	
+	var input = document.getElementById("search_text");
+	input.addEventListener("keyup", function(event) {
+		if (event.keyCode === 13) {
+			event.preventDefault();
+			if (input.value  === "") {
+				window.location = window.location.href.split("?")[0];
+			}
+			else {
+				window.location = window.location.href.split("?")[0]+"?search=" + input.value;
+			}
+		}
+	}
+	);
 </script>
 {% endblock %}
