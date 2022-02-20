@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from parameters.models import GenderModel, CountryModel, CityModel, EmailTypeModel, PhoneTypeModel, MediaTypeModel, RelationTypeModel, SchoolTypeModel
-from main.models import PeopleGroupModel, SchoolModel, DepartmentModel
+from parameters.models import GenderModel, CountryModel, CityModel, EmailTypeModel, PhoneTypeModel, MediaTypeModel, PeopleGroupModel
+from authentication.models import CompanyModel,BranchModel
 from datetime import datetime
+from functions.manager import CustomManager
 
 class PersonModel(models.Model):
     code = models.CharField(verbose_name='Kodu', null=True, blank=True, max_length=20)
@@ -24,6 +25,9 @@ class PersonModel(models.Model):
     date_of_death = models.DateField(verbose_name='Ölüm Tarihi', null=True, blank=True)
     favorite = models.BooleanField(verbose_name='Favori', null=True, blank=True, default=0)
     desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
+    branch_id = models.ForeignKey(verbose_name='Şube', null=True, blank=True,on_delete=(models.CASCADE), to=BranchModel,default="",related_name="person_info")
+    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.CASCADE), to=CompanyModel,default="",related_name="person_info")
+    objects = CustomManager()
 
     class Meta:
         db_table = 'people_person'
@@ -46,28 +50,14 @@ class PersonModel(models.Model):
         return (super().save)(*args, **kwargs)
 
 
-class EducationModel(models.Model):
-    person_id = models.ForeignKey(verbose_name='Kim', null=True, blank=True, on_delete=(models.SET_NULL), to=PersonModel)
-    schooltype_id = models.ForeignKey(verbose_name='Okul Tipi', null=True, blank=True, on_delete=(models.SET_NULL), to=SchoolTypeModel)
-    school_id = models.ForeignKey(verbose_name='Okul', null=True, blank=True, on_delete=(models.SET_NULL), to=SchoolModel)
-    department_id = models.ForeignKey(verbose_name='Bölümü', null=True, blank=True, on_delete=(models.SET_NULL), to=DepartmentModel)
-    graduation_year = models.CharField(verbose_name='Mezuniyet Yılı', null=True, blank=True, max_length=4)
-    desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
-
-    class Meta:
-        db_table = 'people_education'
-        ordering = ['person_id']
-        verbose_name = 'Kişi Eğitimi'
-
-    def __str__(self):
-        return '%s > %s > %s' % (self.person_id, self.school_id, self.department_id)
-
-
 class EmailModel(models.Model):
-    person_id = models.ForeignKey(verbose_name='Kimin', null=True, blank=True, on_delete=(models.SET_NULL), to=PersonModel)
+    person_id = models.ForeignKey(verbose_name='Kimin', null=True, blank=True, on_delete=(models.SET_NULL), to=PersonModel,related_name="email_info")
     email_type_id = models.ForeignKey(verbose_name='E-Mail Tipi', null=True, blank=True, on_delete=(models.SET_NULL), to=EmailTypeModel)
     email = models.EmailField(verbose_name='E-Mail Adresi', null=True, blank=True, max_length=100)
     desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
+    branch_id = models.ForeignKey(verbose_name='Şube', null=True, blank=True,on_delete=(models.CASCADE), to=BranchModel,default="",related_name="email_info")
+    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.CASCADE), to=CompanyModel,default="",related_name="email_info")
+    objects = CustomManager()
 
     class Meta:
         db_table = 'people_email'
@@ -79,10 +69,13 @@ class EmailModel(models.Model):
 
 
 class PhoneModel(models.Model):
-    person_id = models.ForeignKey(verbose_name='Kimin', null=True, blank=True, on_delete=(models.SET_NULL), to=PersonModel)
+    person_id = models.ForeignKey(verbose_name='Kimin', null=True, blank=True, on_delete=(models.SET_NULL), to=PersonModel,related_name="phone_info")
     phone_type_id = models.ForeignKey(verbose_name='Telefon Tipi', null=True, blank=True, on_delete=(models.SET_NULL), to=PhoneTypeModel)
     phone_number = models.CharField(verbose_name='Telefon Numarası', null=True, blank=True, max_length=20)
     desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
+    branch_id = models.ForeignKey(verbose_name='Şube', null=True, blank=True,on_delete=(models.CASCADE), to=BranchModel,default="",related_name="phone_info")
+    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.CASCADE), to=CompanyModel,default="",related_name="phone_info")
+    objects = CustomManager()
 
     class Meta:
         db_table = 'people_phone'
@@ -94,10 +87,13 @@ class PhoneModel(models.Model):
 
 
 class PhotoModel(models.Model):
-    person_id = models.ForeignKey(verbose_name='Kimin', null=True, blank=True, on_delete=(models.SET_NULL), to=PersonModel)
+    person_id = models.ForeignKey(verbose_name='Kimin', null=True, blank=True, on_delete=(models.SET_NULL), to=PersonModel,related_name="photo_info")
     name = models.CharField(verbose_name='Adı', null=True, blank=True, max_length=100)
     hyperlink = models.CharField(verbose_name='Bağlantı Adresi', null=True, blank=True, max_length=200)
     desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
+    branch_id = models.ForeignKey(verbose_name='Şube', null=True, blank=True,on_delete=(models.CASCADE), to=BranchModel,default="",related_name="photo_info")
+    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.CASCADE), to=CompanyModel,default="",related_name="photo_info")
+    objects = CustomManager()
 
     class Meta:
         db_table = 'people_photo'
@@ -109,11 +105,14 @@ class PhotoModel(models.Model):
 
 
 class SocialMediaModel(models.Model):
-    person_id = models.ForeignKey(verbose_name='Kimin', null=True, blank=True, on_delete=(models.SET_NULL), to=PersonModel)
+    person_id = models.ForeignKey(verbose_name='Kimin', null=True, blank=True, on_delete=(models.SET_NULL), to=PersonModel,related_name="social_info")
     media_type_id = models.ForeignKey(verbose_name='Sosyal Medya Tipi', null=True, blank=True, on_delete=(models.SET_NULL), to=MediaTypeModel)
     username = models.CharField(verbose_name='Kullanıcı Adı', null=True, blank=True, max_length=50)
     hyperlink = models.CharField(verbose_name='Bağlantı Adresi', null=True, blank=True, max_length=200)
     desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
+    branch_id = models.ForeignKey(verbose_name='Şube', null=True, blank=True,on_delete=(models.CASCADE), to=BranchModel,default="",related_name="social_info")
+    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.CASCADE), to=CompanyModel,default="",related_name="social_info")
+    objects = CustomManager()
 
     class Meta:
         db_table = 'people_socialmedia'
@@ -122,31 +121,3 @@ class SocialMediaModel(models.Model):
 
     def __str__(self):
         return '%s > %s > %s' % (self.person_id, self.media_type_id, self.username)
-
-
-class RelationshipModel(models.Model):
-    person_id = models.ForeignKey(verbose_name='Kişi', null=True, blank=True, on_delete=(models.SET_NULL), to=PersonModel)
-    relation_id = models.ForeignKey(verbose_name='İlişki', null=True, blank=True, on_delete=(models.SET_NULL), to=RelationTypeModel)
-    desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
-
-    class Meta:
-        db_table = 'people_relationtree'
-        ordering = ['person_id', 'relation_id']
-        verbose_name = 'Rehber İlişkisi'
-
-    def __str__(self):
-        return '%s: %s' % (self.relation_id, self.person_id)
-
-
-class RelationshipPersonModel(models.Model):
-    person_id = models.ForeignKey(verbose_name='Kişi', null=True, blank=True, on_delete=(models.SET_NULL), to=PersonModel)
-    relation_tree_id = models.ForeignKey(verbose_name='İlişki Ağacı', null=True, blank=True, on_delete=(models.SET_NULL), to=RelationshipModel)
-    desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
-
-    class Meta:
-        db_table = 'people_relationtreeperson'
-        ordering = ['person_id', 'relation_tree_id']
-        verbose_name = 'İlişki Ağacı - Kişi'
-
-    def __str__(self):
-        return '%s <> %s' % (self.relation_tree_id, self.person_id)

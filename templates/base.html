@@ -1,4 +1,4 @@
-{% load static TemplateFuncs %}
+{% load static %}
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -22,6 +22,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <body class="hold-transition sidebar-mini sidebar-collapse" onload="PageLoad()">
 
 {% block modal_content %}
+
 {% endblock %}
 <div class="wrapper">
 
@@ -60,7 +61,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
       {% if request.user.is_authenticated  %}
       <div class="brand-link" style="display: flex;justify-content:space-between">
         <a href="{% url 'HomePage' %}" class="brand-link-item" style="color:#fff">
-          <img src="{% GetProfilePic request %}" alt="Profile Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
           <span class="brand-text font-weight-light"><b>{{ request.user.first_name }} {{ request.user.last_name }}</b></span>
         </a>
         <a href="{% url "authentication:LogoutPage" %}" class="brand-link-item"  style="color:#fff">
@@ -90,7 +90,54 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
       </div>
       <!-- Sidebar Menu -->
-        {% GetSidebarMenu request %}
+      <nav class="mt-2" id="id_sidebar">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="true" id="id_sidebar_menu">
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-layer-group"></i>
+                <p>Yetkinlik
+                    <i class="fas fa-angle-left right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                  <a href="/authentication/list/AuthenticationUser" class="nav-link">
+                      <i class="nav-icon fas fa-table"></i>
+                      <p>Kullanıcılar</p>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a href="/authentication/list/AuthenticationGroup" class="nav-link">
+                      <i class="nav-icon fas fa-table"></i>
+                      <p>Şube Grupları</p>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a href="/authentication/list/Branch" class="nav-link">
+                      <i class="nav-icon fas fa-table"></i>
+                      <p>Şubeler</p>
+                  </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-layer-group"></i>
+                <p>Rehber
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                  <a href="/people/list/Person" class="nav-link">
+                      <i class="nav-icon fas fa-table"></i>
+                      <p>Kişiler</p>
+                  </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+    </nav>
       <!-- /.sidebar-menu -->
 
     </section>

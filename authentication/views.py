@@ -1,74 +1,99 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import redirect
-from django.views.generic import FormView, View
+from django.views.generic import FormView,ListView,DetailView
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.models import User
-from .models import UserIpModel
-from .forms import RegisterForm
-from functions.other.Global import MailService
+from .forms import RegisterForm,AuthenticationUserForm,AuthenticationGroupForm
+from .models import AuthenticationUserModel,AuthenticationGroupModel,BranchModel,CompanyModel
 
 class MyLoginView(LoginView):
+	def form_valid(self, form):
+		self.request.session.set_expiry(14400)
+		if self.request.method == 'POST':
+			login_form = self.request.POST
+			if 'remember_me' in login_form:
+				if login_form['remember_me'] == 'on':
+					self.request.session.set_expiry(2592000)
+		return super(MyLoginView, self).form_valid(form)
 
-    def get_perm(self, user_name, ip):
-        perm_obj = UserIpModel.objects.get(ip_address=ip)
-        user_obj = User.objects.get(username=user_name)
-        if perm_obj:
-            if perm_obj.permission:
-                if user_obj:
-                    return True
-            elif user_obj:
-                new_user_ip = UserIpModel.objects.create(ip=ip)
-                new_user_ip.save()
-                ms = MailService('admin@myerp.talhacelik.com')
-                ms.set_recipient_list(['talhacelk@gmail.com'])
-                ms.set_subject('Yeni Ip Ile Giris Denemesi')
-                ms.set_headers('Yeni Ip Ile Giris Denemesi')
-                message = 'Giris Benemesi Bilgileri:\n\nIp: %s\nKullanıcı Adı: %s\nKullanıcı Mail Adresi: %s\nKullanıcı Adı Soyadı: %s\nYetkilendirme Anahtarı: %s\n\nAdresinde yapılan kullanıcı girisi engellendi\nYetkilendirmek İcin <a href="https://myerp.talhacelik.com/register_validation/?validation_code=%s">Buraya Tıklayınız!</a>\n' % (ip, user_obj.username, user_obj.email, user_obj.get_full_name(), new_user_ip.auth_key, new_user_ip.auth_key)
-                ms.set_body(message)
-                ms.send_email()
-        return False
-
-    def form_valid(self, form):
-        ip = self.request.META['REMOTE_ADDR']
-        self.request.session.set_expiry(14400)
-        if self.request.method == 'POST':
-            login_form = self.request.POST
-            user_name = login_form['username']
-            if not self.get_perm(user_name, ip):
-                return redirect('/login/?warning=NoPermission')
-            if 'remember_me' in login_form:
-                if login_form['remember_me'] == 'on':
-                    self.request.session.set_expiry(2592000)
-        return super(MyLoginView, self).form_valid(form)
-
-    def get_success_url(self):
-        return redirect('HomePage').url
+	def get_success_url(self):
+		return redirect('HomePage').url
 
 
 class MyLogOutView(LogoutView):
 
-    def get_success_url_allowed_hosts(self):
-        return redirect('/').url
+	def get_success_url_allowed_hosts(self):
+		return redirect('/').url
 
 
 class MyRegisterView(FormView):
-    template_name = 'registration/register.html'
-    form_class = RegisterForm
+	template_name = 'authentication/form/register.html'
+	form_class = RegisterForm
 
-    def get_success_url(self):
-        return '/login/'
+	def get_success_url(self):
+		return '/authentication/login/'
+	
+	def form_valid(self,form):
+		form.save()
+		return super(MyRegisterView, self).form_valid(form)
 
 
-class IpValidationView(View):
 
-    def grant_permission(self, user_ip):
-        user_ip.permission = True
-        user_ip.save()
 
-    def get(self, request):
-        if 'validation_code' in request.GET:
-            auth_key = request.GET['validation_code'].replace(' ', '+')
-            user_ip = UserIpModel.objects.get(auth_key=auth_key)
-            self.grant_permission(user_ip)
-            return redirect('/LoginPage/')
-        return redirect('/IndexPage/')
+class ListAuthenticationUser(ListView):
+	template_name = "authentication/list/AuthenticationUser.html"
+	model = AuthenticationUserModel
+	title = "Kullanıcı Listesi"
+
+	def get_queryset(self):
+		return self.model.objects.company_all(company_id=self.request.user.user_info.company_id)
+	
+class ListAuthenticationGroup(ListView):
+	template_name = "authentication/list/AuthenticationGroup.html"
+	model = AuthenticationGroupModel
+	title = "Grup Listesi"
+
+	def get_queryset(self):
+		return self.model.objects.filter(branch_id__company_id=self.request.user.user_info.company_id)
+	
+class ListBranch(ListView):
+	template_name = "authentication/list/Branch.html"
+	model = BranchModel
+	title = "Şube Listesi"
+
+	def get_queryset(self):
+		return self.model.objects.company_all(company_id=self.request.user.user_info.company_id)
+	
+class ListCompany(ListView):
+	template_name = "authentication/list/Company.html"
+	model = CompanyModel
+	title = "Firma Listesi"
+
+	def get_queryset(self):
+		return self.model.objects.all()
+
+class CreateAuthenticationUser(FormView):
+	template_name = 'authentication/form/AuthenticationUser.html'
+	form_class = AuthenticationUserForm
+
+	def get_success_url(self):
+		return '/authentication/list/AuthenticationUser'
+	
+	def form_valid(self,form):
+		form.save(self.request.user.user_info.company_id)
+		return super(CreateAuthenticationUser, self).form_valid(form)
+
+class CreateAuthenticationGroup(FormView):
+	template_name = 'authentication/form/AuthenticationGroup.html'
+	form_class = AuthenticationGroupForm
+
+	def get_success_url(self):
+		return '/authentication/list/Authenticationgroup'
+	
+	def form_valid(self,form):
+		form.save(self.request.user.user_info.company_id)
+		return super(CreateAuthenticationUser, self).form_valid(form)
+
+	def get_form(self,form_class=None):
+		form = super(CreateAuthenticationGroup, self).get_form(form_class)
+		form.fields["branch_id"].queryset=BranchModel.objects.company_all(company_id=self.request.user.user_info.company_id)
+		return form

@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_content %}
+<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-xl-4">
+				</div>
+				<div class="col-xl-4"> 	
+					<div class="input-group input-group-sm" style="width: %100;">
+						<input type="text" name="search_text" class="form-control float-right" placeholder="Arama" id="search_text">
+					</div>
+				</div>
+				<div class="col-xl-4">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="{% url "authentication:Create_AuthenticationUser" %}" class="btn btn-outline-secondary">Yeni Ekle</a></li>
+					</ol>
+				</div>
+			</div>
+		</div><!-- /.container-fluid -->
+	</section>
+
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="container-fluid">
+		  <div class="row">
+			<div class="col-12">
+			  <div class="card">
+				<!-- /.card-header -->
+				<div class="card-body">
+				  <table id="id_data_table" class="table table-bordered table-hover" data-page-length='50'>
+					<thead>
+						<tr>
+							<th>Tam Adı</th>
+							<th>Kullanıcı Adı</th>
+							<th>E-Posta</th>
+							<th>Aktif mi?</th>
+							<th>Personel Mi?</th>
+							<th>Açıklama</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for object in object_list %}
+							<tr class="row-link" href="#">
+								<td style="max-width: 50ch">
+									{{ object.user_id.first_name }} {{ object.user_id.last_name }}
+								</td>
+								<td style="max-width: 50ch">
+									{{ object.user_id.username }}
+								</td>
+								<td style="max-width: 50ch">
+									{{ object.user_id.email }}
+								</td>
+								<td style="max-width: 50ch">
+									{{ object.user_id.is_active }}
+								</td>
+								<td style="max-width: 50ch">
+									{{ object.user_id.is_staff }}
+								</td>
+								<td style="max-width: 50ch">
+									{{ object.desc }}
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+					<tfoot>
+						<tr>
+							<th>Tam Adı</th>
+							<th>Kullanıcı Adı</th>
+							<th>E-Posta</th>
+							<th>Aktif mi?</th>
+							<th>Personel Mi?</th>
+							<th>Açıklama</th>
+						</tr>
+					</tfoot>
+				  </table>
+				</div>
+				<!-- /.card-body -->
+			  </div>
+			  <!-- /.card -->
+  
+			</div>
+			<!-- /.col -->
+		  </div>
+		  <!-- /.row -->
+		</div>
+		<!-- /.container-fluid -->
+	  </section>
+{% endblock  %}
+{% block more_stylesheet %}
+  <!-- DataTables -->
+  <link rel="stylesheet" href="{% static '/lte_source/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+  <link rel="stylesheet" href="{% static '/lte_source/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+  <link rel="stylesheet" href="{% static '/lte_source/plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+  {% endblock  %}
+{% block more_script %}
+<!-- DataTables  & Plugins -->
+<script src="{% static '/lte_source/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static '/lte_source/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static '/lte_source/plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static '/lte_source/plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+<script src="{% static '/lte_source/plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static '/lte_source/plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+<script>
+	$('#id_data_table').DataTable({
+		"paging": false,
+		"lengthChange": false,
+		"searching": false,
+		"ordering": false,
+		"info": false,
+		"autoWidth": true,
+		"responsive": true,
+	});
+	
+	$('.row-link').dblclick(function() {
+		window.location = this.getAttribute("href")
+	});
+	
+</script>
+{% endblock %}

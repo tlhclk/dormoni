@@ -35,6 +35,7 @@ function DateSlider(sl_elem){
         hasGrid : true,
         from_fixed: true,
         to_fixed: true, 
+        skinColor: '#F6F6F6'
     })
 }
 

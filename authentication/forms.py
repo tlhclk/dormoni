@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-import imp
+from unicodedata import name
 from django import forms
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
-from .models import CompanyModel,BranchModel,AuthenticationGroupModel,AuthenticationUserModel,UserGroupModel
+from .models import AuthenticationGroupModel, BranchModel, CompanyModel,AuthenticationUserModel, UserGroupModel
+from datetime import date
 UserModel = get_user_model()
-
 
 class RegisterForm(forms.Form):
 	email = forms.EmailField(label='E-Mail', widget=forms.EmailInput(attrs={'class': 'form-control'}), required=True)
@@ -118,7 +118,7 @@ class RegisterForm(forms.Form):
 		branch_id.save()
 		# New Group Create
 		group_id=AuthenticationGroupModel()
-		group_id.name="Yönetici"
+		group_id.name="Genel"
 		group_id.code="000"
 		group_id.branch_id=branch_id
 		group_id.save()
@@ -135,8 +135,6 @@ class RegisterForm(forms.Form):
 		ug_id.company_id=company_id
 		ug_id.group_id=group_id
 		ug_id.save()
-		# Her Tabloya Yetki
-		# Her Tablo Alanına Yetki
 
 
 class AuthenticationUserForm(forms.Form):
@@ -196,6 +194,7 @@ class AuthenticationGroupForm(forms.Form):
 	code = forms.CharField(label='Kodu', widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
 	desc = forms.CharField(label='Açıklama', widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
 
+
 	class Meta:
 		fields = ['branch_id', 'name', 'code', 'desc']
 
@@ -204,7 +203,7 @@ class AuthenticationGroupForm(forms.Form):
 		code = self.cleaned_data['code']
 		desc = self.cleaned_data['desc']
 		branch_id = self.cleaned_data['branch_id']
-		# New Group Create
+		# New GroupA Create
 		group_id = AuthenticationGroupModel()
 		group_id.name=name
 		group_id.code=code

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from django.shortcuts import render
 from django.views.generic import View
+
 
 class IndexPage(View):
     template_name = 'base.html'

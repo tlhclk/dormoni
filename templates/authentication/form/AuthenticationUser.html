@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block more_stylesheet %}
+
+	<!-- iCheck for checkboxes and radio inputs -->
+	<link rel="stylesheet" href="{% static "/lte_source/plugins/icheck-bootstrap/icheck-bootstrap.min.css" %}">
+	<!-- Tempusdominus Bootstrap 4 -->
+	<link rel="stylesheet" href="{% static "/lte_source/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" %}">
+	<!-- Select2 -->
+	<link rel="stylesheet" href="{% static "/lte_source/plugins/select2/css/select2.min.css" %}">
+	<link rel="stylesheet" href="{% static "/lte_source/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" %}">
+{% endblock %}
+{% block page_content %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>{{ title }}</h1>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <form method="post" class="user" id="form_user">
+                    {% csrf_token %}
+                    <div class="card card-primary card-outline card-outline-tabs">
+                        <!-- /.card-header -->
+                        <div class="card-header p-0 border-bottom-0">
+                            <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="content_user_tab" data-toggle="pill" href="#content_user" role="tab" aria-controls="content_user" aria-selected="true">Kullanıcı</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-body">
+                            <div class="tab-content" id="custom-tabs-four-tabContent">
+                                <div class="tab-pane fade show active" id="content_user" role="tabpanel" aria-labelledby="content_user_tab">
+                                    <div class="card-body">
+                                        <div class="row" style="display: flex" id="idr_email">
+                                            <span style="flex: 1"><strong>Mail Adresi:</strong> </span>
+                                            <span style="flex: 1">{{ form.email }}</span>
+                                        </div>
+                                        <br>
+                                        <div class="row" style="display: flex" id="idr_username">
+                                            <span style="flex: 1"><strong>Kullanıcı Adı:</strong> </span>
+                                            <span style="flex: 1">{{ form.username }}</span>
+                                        </div>
+                                        <br>
+                                        <div class="row" style="display: flex" id="idr_first_name">
+                                            <span style="flex: 1"><strong>Adı:</strong> </span>
+                                            <span style="flex: 1">{{ form.first_name }}</span>
+                                        </div>
+                                        <br>
+                                        <div class="row" style="display: flex" id="idr_last_name">
+                                            <span style="flex: 1"><strong>Soyadı:</strong> </span>
+                                            <span style="flex: 1">{{ form.last_name }}</span>
+                                        </div>
+                                        <br>
+                                        <div class="row" style="display: flex" id="idr_profile_pic">
+                                            <span style="flex: 1"><strong>Profil Fotoğrafı:</strong> </span>
+                                            <span style="flex: 1">{{ form.profile_pic }}</span>
+                                        </div>
+                                        <br>
+                                        <div class="row" style="display: flex" id="idr_desc">
+                                            <span style="flex: 1"><strong>Açıklama:</strong> </span>
+                                            <span style="flex: 1">{{ form.desc }}</span>
+                                        </div>
+                                        <br>
+                                        <div class="row justify-content-end">
+                                            <button class="btn btn-secondary btn-icon-split" type="submit">
+                                                <span class="text">Kaydet</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    <!-- /.card -->
+                    </div>
+                </form> 
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+        
+{% endblock %}
+{% block more_script %}
+	<!-- Select2 -->
+	<script src="{% static "/lte_source/plugins/select2/js/select2.full.min.js" %}"></script>
+	<!-- InputMask -->
+	<script src="{% static "/lte_source/plugins/moment/moment.min.js" %}"></script>
+	<!-- Tempusdominus Bootstrap 4 -->
+	<script src="{% static "/lte_source/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js" %}"></script>
+	<script>
+		$(document).ready(function () {
+			$('.form-date').datetimepicker({
+				locales:'tr',
+				format:  "YYYY-MM-DD",
+				todayHighlight:true,
+				pickTime:false,
+				pickDate: true,
+				inline: true,
+				buttons: {
+					showToday: true,
+				},
+			});
+			$('.form-time').datetimepicker({
+				locale :'tr',
+				format:  "HH:mm",
+				pickDate: false,
+				use24hours: true,
+				inline: true,
+			});
+			$('.form-date-time').datetimepicker({
+				locale :'tr',
+				format:  "YYYY-MM-DD HH:mm",
+				todayHighlight:true,
+				pickTime:true,
+				pickDate: true,
+				use24hours: true,
+				sideBySide: true,
+				inline: true,
+				buttons: {
+					showToday: true,
+				},
+			});
+			// select özellikleri ata
+			$('.form-dropdown-select2').select2({
+				theme: 'bootstrap4'});
+			$('.form-checkbox-select2').select2({});
+			// datatable tanımı
+			
+		});
+		function UserSave() {
+			var input_list=$("#content_user input");
+			for (var i=0;i<input_list.length;i++)
+			{
+				input_list[i].setAttribute('readonly','readonly');
+			}
+			document.getElementById("content_company_tab").click();
+		}
+	</script>
+{% endblock %}
