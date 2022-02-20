@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-zvyg&tj03i2&!6pko_0zm2@hiu(m+2p$2c$xzge@2o5-xenqtb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["dormoni.talhacelik.com","localhost","talhacelik.com"]
 
 
 # Application definition
@@ -77,9 +77,17 @@ WSGI_APPLICATION = 'dormoni.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    #'default': {
+    #    'ENGINE': 'django.db.backends.sqlite3',
+    #    'NAME': BASE_DIR / 'db.sqlite3',
+    #},
+    'default':{
+        'ENGINE':'django.db.backends.mysql',
+        'NAME': 'talhqpxw_dormoni',
+        'USER': 'talhqpxw_tlhclk',
+        'PASSWORD': 'Tlhclk.5357',
+        'HOST':'localhost',
+        'PORT':3306
     }
 }
 
@@ -123,7 +131,8 @@ USE_TZ = True
 import os
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'templates/source')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = '/home/talhqpxw/dormoni.talhacelik.com/static'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 

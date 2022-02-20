@@ -1,0 +1,1 @@
+from dormoni.wsgi import application
