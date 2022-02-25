@@ -4,7 +4,8 @@ from django.db import models
 from django.contrib.auth.hashers import make_password
 from datetime import date
 from django.contrib.auth.models import User
-from functions.manager import CustomManager
+from schema.models import PathModel
+from functions.queryset.manager import CustomManager
 
 
 class CompanyModel(models.Model):
@@ -52,6 +53,7 @@ class BranchModel(models.Model):
 
 
 class AuthenticationGroupModel(models.Model):
+    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.SET_NULL), to=CompanyModel,default="",related_name="group_info")
     branch_id = models.ForeignKey(verbose_name='Firma', on_delete=(models.CASCADE), to=BranchModel,default="",related_name="group_info") 
     name = models.CharField(verbose_name='Adı', blank=True, max_length=200)
     code = models.CharField(verbose_name='Kodu', null=True, blank=True, max_length=200)
@@ -69,7 +71,8 @@ class AuthenticationGroupModel(models.Model):
 
 
 class AuthenticationUserModel(models.Model):
-    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.CASCADE), to=CompanyModel,default="",related_name="user_info")
+    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.SET_NULL), to=CompanyModel,default="",related_name="user_info")
+    branch_id = models.ForeignKey(verbose_name='Şube', null=True, blank=True,on_delete=(models.SET_NULL), to=BranchModel,default="",related_name="user_info")
     user_id = models.OneToOneField(verbose_name='Kullanıcı', unique=True, default='', blank=True, on_delete=(models.CASCADE), to=User,related_name="user_info")
     profile_pic = models.CharField(verbose_name='Profil Fotoğrafı', null=True, blank=True, max_length=200)
     desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
@@ -89,7 +92,7 @@ class UserGroupModel(models.Model):
     user_id = models.ForeignKey(verbose_name='Kullanıcı', on_delete=(models.CASCADE), to=AuthenticationUserModel,default="",related_name="usergroup_info")
     group_id = models.ForeignKey(verbose_name='Grup', on_delete=(models.CASCADE), to=AuthenticationGroupModel,default="",related_name="usergroup_info")
     desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
-    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.CASCADE), to=CompanyModel,default="",related_name="usergroup_info")
+    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.SET_NULL), to=CompanyModel,default="",related_name="usergroup_info")
     objects = CustomManager()
 
     class Meta:
@@ -107,3 +110,21 @@ class UserGroupModel(models.Model):
             return super().save()
         else:
             raise ValueError("Kullanıcı ve Group Firmaları Aynı Değildir. Lütfen Aynı Firma Grubuna Atama Yapınız.")
+
+
+class GroupPathModel(models.Model):
+    group_id = models.ForeignKey(verbose_name='Grup', on_delete=(models.CASCADE), to=AuthenticationGroupModel,default="",related_name="userpath_info")
+    path_id = models.ForeignKey(verbose_name='Güzergah', on_delete=(models.CASCADE), to=PathModel,default="",related_name="userpath_info")
+    desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
+    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.SET_NULL), to=CompanyModel,default="",related_name="userpath_info")
+    objects = CustomManager()
+
+    
+    class Meta:
+        db_table = 'authentication_grouppath'
+        ordering = ['path_id', 'group_id']
+        verbose_name = 'Kullanıcı Grupları'
+        unique_together = ('group_id', 'path_id')
+
+    def __str__(self):
+        return '%s > %s' % (str(self.path_id), str(self.group_id))

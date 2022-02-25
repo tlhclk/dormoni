@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import redirect
 from django.views.generic import FormView,ListView,DetailView
+from functions.queryset.custom_view import CustomListView
 from django.contrib.auth.views import LoginView, LogoutView
 from .forms import RegisterForm,AuthenticationUserForm,AuthenticationGroupForm
-from .models import AuthenticationUserModel,AuthenticationGroupModel,BranchModel,CompanyModel
+from .models import AuthenticationUserModel,AuthenticationGroupModel,BranchModel,CompanyModel,UserGroupModel
 
 class MyLoginView(LoginView):
 	def form_valid(self, form):
@@ -15,14 +16,11 @@ class MyLoginView(LoginView):
 					self.request.session.set_expiry(2592000)
 		return super(MyLoginView, self).form_valid(form)
 
-	def get_success_url(self):
-		return redirect('HomePage').url
-
 
 class MyLogOutView(LogoutView):
 
 	def get_success_url_allowed_hosts(self):
-		return redirect('/').url
+		return redirect('/')
 
 
 class MyRegisterView(FormView):
@@ -37,31 +35,22 @@ class MyRegisterView(FormView):
 		return super(MyRegisterView, self).form_valid(form)
 
 
-
-
-class ListAuthenticationUser(ListView):
+class ListAuthenticationUser(CustomListView):
 	template_name = "authentication/list/AuthenticationUser.html"
 	model = AuthenticationUserModel
 	title = "Kullanıcı Listesi"
 
-	def get_queryset(self):
-		return self.model.objects.company_all(company_id=self.request.user.user_info.company_id)
-	
-class ListAuthenticationGroup(ListView):
+
+class ListAuthenticationGroup(CustomListView):
 	template_name = "authentication/list/AuthenticationGroup.html"
 	model = AuthenticationGroupModel
 	title = "Grup Listesi"
-
-	def get_queryset(self):
-		return self.model.objects.filter(branch_id__company_id=self.request.user.user_info.company_id)
 	
-class ListBranch(ListView):
+class ListBranch(CustomListView):
 	template_name = "authentication/list/Branch.html"
 	model = BranchModel
 	title = "Şube Listesi"
 
-	def get_queryset(self):
-		return self.model.objects.company_all(company_id=self.request.user.user_info.company_id)
 	
 class ListCompany(ListView):
 	template_name = "authentication/list/Company.html"

@@ -8,7 +8,7 @@
 				<div class="col-xl-4">
 				</div>
 				<div class="col-xl-4"> 	
-					<div class="input-group input-group-sm" style="width: %100;">
+					<div class="input-group input-group-sm" style="width: 100%;">
 						<input type="text" name="search_text" class="form-control float-right" placeholder="Arama" id="search_text">
 					</div>
 				</div>
@@ -44,12 +44,14 @@
 					</thead>
 					<tbody>
 						{% for object in object_list %}
-							<tr class="row-link" href="{% url 'global_detail' table_name object.id %}">
-								{% for field in fields %}
-									<td style="max-width: 30ch">
-										{{ object|GetAttrValue:field|safe }}
-									</td>
-								{% endfor %}
+							<tr class="row-link" href="{% url 'people:Detail_Person' object.id %}">
+								<td style="max-width: 30ch">{{ object.full_name }}</td>
+								<td style="max-width: 30ch">{{ object.group_id|safe }}</td>
+								<td style="max-width: 30ch">{{ object.gender_id|safe }}</td>
+								<td style="max-width: 30ch">{{ object.city_id|safe }}</td>
+								<td style="max-width: 30ch">{{ object.phone_info|safe }}</td>
+								<td style="max-width: 30ch">{{ object.full_name }}</td>
+								<td style="max-width: 30ch">{{ object.full_name }}</td>
 							</tr>
 						{% endfor %}
 					</tbody>

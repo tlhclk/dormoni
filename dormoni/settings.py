@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-zvyg&tj03i2&!6pko_0zm2@hiu(m+2p$2c$xzge@2o5-xenqtb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["dormoni.talhacelik.com","localhost","talhacelik.com"]
+ALLOWED_HOSTS = ["dormoni.talhacelik.com","localhost","talhacelik.com","127.0.0.1"]
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'authentication.apps.AuthenticationConfig',
     'parameters.apps.ParametersConfig',
     'people.apps.PeopleConfig',
+    'schema.apps.SchemaConfig'
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'functions.middleware.permission.PermissionMiddleware'
 ]
 
 ROOT_URLCONF = 'dormoni.urls'
@@ -77,18 +79,18 @@ WSGI_APPLICATION = 'dormoni.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    #'default': {
-    #    'ENGINE': 'django.db.backends.sqlite3',
-    #    'NAME': BASE_DIR / 'db.sqlite3',
-    #},
-    'default':{
-        'ENGINE':'django.db.backends.mysql',
-        'NAME': 'talhqpxw_dormoni',
-        'USER': 'talhqpxw_tlhclk',
-        'PASSWORD': 'Tlhclk.5357',
-        'HOST':'localhost',
-        'PORT':3306
-    }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    #'default':{
+    #    'ENGINE':'django.db.backends.mysql',
+    #    'NAME': 'talhqpxw_dormoni',
+    #    'USER': 'talhqpxw_tlhclk',
+    #    'PASSWORD': 'Tlhclk.5357',
+    #    'HOST':'localhost',
+    #    'PORT':3306
+    #}
 }
 
 
@@ -124,6 +126,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+LOGIN_REDIRECT_URL = 'HomePage'
+LOGIN_URL = '/authentication/login/'
+LOGOUT_REDIRECT_URL = 'IndexPage'
+LOGOUT_URL = '/authentication/logout/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/

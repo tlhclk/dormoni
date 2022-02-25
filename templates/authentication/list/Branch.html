@@ -8,7 +8,7 @@
 				<div class="col-xl-4">
 				</div>
 				<div class="col-xl-4"> 	
-					<div class="input-group input-group-sm" style="width: %100;">
+					<div class="input-group input-group-sm" style="width: 100%;">
 						<input type="text" name="search_text" class="form-control float-right" placeholder="Arama" id="search_text">
 					</div>
 				</div>
@@ -33,11 +33,9 @@
 				  <table id="id_data_table" class="table table-bordered table-hover" data-page-length='50'>
 					<thead>
 						<tr>
-							<th>Tam Adı</th>
-							<th>Kullanıcı Adı</th>
-							<th>E-Posta</th>
-							<th>Aktif mi?</th>
-							<th>Personel Mi?</th>
+							<th>Firma Adı</th>
+							<th>Şube Adı</th>
+							<th>Kodu</th>
 							<th>Açıklama</th>
 						</tr>
 					</thead>
@@ -45,19 +43,13 @@
 						{% for object in object_list %}
 							<tr class="row-link" href="#">
 								<td style="max-width: 50ch">
-									{{ object.user_id.first_name }} {{ object.user_id.last_name }}
+									{{ object.company_id|safe }}
 								</td>
 								<td style="max-width: 50ch">
-									{{ object.user_id.username }}
+									{{ object.name }}
 								</td>
 								<td style="max-width: 50ch">
-									{{ object.user_id.email }}
-								</td>
-								<td style="max-width: 50ch">
-									{{ object.user_id.is_active }}
-								</td>
-								<td style="max-width: 50ch">
-									{{ object.user_id.is_staff }}
+									{{ object.code }}
 								</td>
 								<td style="max-width: 50ch">
 									{{ object.desc }}
@@ -67,11 +59,9 @@
 					</tbody>
 					<tfoot>
 						<tr>
-							<th>Tam Adı</th>
-							<th>Kullanıcı Adı</th>
-							<th>E-Posta</th>
-							<th>Aktif mi?</th>
-							<th>Personel Mi?</th>
+							<th>Firma Adı</th>
+							<th>Şube Adı</th>
+							<th>Kodu</th>
 							<th>Açıklama</th>
 						</tr>
 					</tfoot>

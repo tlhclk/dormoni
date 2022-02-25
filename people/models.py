@@ -3,7 +3,7 @@ from django.db import models
 from parameters.models import GenderModel, CountryModel, CityModel, EmailTypeModel, PhoneTypeModel, MediaTypeModel, PeopleGroupModel
 from authentication.models import CompanyModel,BranchModel
 from datetime import datetime
-from functions.manager import CustomManager
+from functions.queryset.manager import CustomManager
 
 class PersonModel(models.Model):
     code = models.CharField(verbose_name='Kodu', null=True, blank=True, max_length=20)
@@ -25,8 +25,8 @@ class PersonModel(models.Model):
     date_of_death = models.DateField(verbose_name='Ölüm Tarihi', null=True, blank=True)
     favorite = models.BooleanField(verbose_name='Favori', null=True, blank=True, default=0)
     desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
-    branch_id = models.ForeignKey(verbose_name='Şube', null=True, blank=True,on_delete=(models.CASCADE), to=BranchModel,default="",related_name="person_info")
-    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.CASCADE), to=CompanyModel,default="",related_name="person_info")
+    branch_id = models.ForeignKey(verbose_name='Şube', null=True, blank=True,on_delete=(models.SET_NULL), to=BranchModel,default="",related_name="person_info")
+    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.SET_NULL), to=CompanyModel,default="",related_name="person_info")
     objects = CustomManager()
 
     class Meta:
@@ -55,8 +55,8 @@ class EmailModel(models.Model):
     email_type_id = models.ForeignKey(verbose_name='E-Mail Tipi', null=True, blank=True, on_delete=(models.SET_NULL), to=EmailTypeModel)
     email = models.EmailField(verbose_name='E-Mail Adresi', null=True, blank=True, max_length=100)
     desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
-    branch_id = models.ForeignKey(verbose_name='Şube', null=True, blank=True,on_delete=(models.CASCADE), to=BranchModel,default="",related_name="email_info")
-    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.CASCADE), to=CompanyModel,default="",related_name="email_info")
+    branch_id = models.ForeignKey(verbose_name='Şube', null=True, blank=True,on_delete=(models.SET_NULL), to=BranchModel,default="",related_name="email_info")
+    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.SET_NULL), to=CompanyModel,default="",related_name="email_info")
     objects = CustomManager()
 
     class Meta:
@@ -73,8 +73,8 @@ class PhoneModel(models.Model):
     phone_type_id = models.ForeignKey(verbose_name='Telefon Tipi', null=True, blank=True, on_delete=(models.SET_NULL), to=PhoneTypeModel)
     phone_number = models.CharField(verbose_name='Telefon Numarası', null=True, blank=True, max_length=20)
     desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
-    branch_id = models.ForeignKey(verbose_name='Şube', null=True, blank=True,on_delete=(models.CASCADE), to=BranchModel,default="",related_name="phone_info")
-    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.CASCADE), to=CompanyModel,default="",related_name="phone_info")
+    branch_id = models.ForeignKey(verbose_name='Şube', null=True, blank=True,on_delete=(models.SET_NULL), to=BranchModel,default="",related_name="phone_info")
+    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.SET_NULL), to=CompanyModel,default="",related_name="phone_info")
     objects = CustomManager()
 
     class Meta:
@@ -91,8 +91,8 @@ class PhotoModel(models.Model):
     name = models.CharField(verbose_name='Adı', null=True, blank=True, max_length=100)
     hyperlink = models.CharField(verbose_name='Bağlantı Adresi', null=True, blank=True, max_length=200)
     desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
-    branch_id = models.ForeignKey(verbose_name='Şube', null=True, blank=True,on_delete=(models.CASCADE), to=BranchModel,default="",related_name="photo_info")
-    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.CASCADE), to=CompanyModel,default="",related_name="photo_info")
+    branch_id = models.ForeignKey(verbose_name='Şube', null=True, blank=True,on_delete=(models.SET_NULL), to=BranchModel,default="",related_name="photo_info")
+    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.SET_NULL), to=CompanyModel,default="",related_name="photo_info")
     objects = CustomManager()
 
     class Meta:
@@ -110,8 +110,8 @@ class SocialMediaModel(models.Model):
     username = models.CharField(verbose_name='Kullanıcı Adı', null=True, blank=True, max_length=50)
     hyperlink = models.CharField(verbose_name='Bağlantı Adresi', null=True, blank=True, max_length=200)
     desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
-    branch_id = models.ForeignKey(verbose_name='Şube', null=True, blank=True,on_delete=(models.CASCADE), to=BranchModel,default="",related_name="social_info")
-    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.CASCADE), to=CompanyModel,default="",related_name="social_info")
+    branch_id = models.ForeignKey(verbose_name='Şube', null=True, blank=True,on_delete=(models.SET_NULL), to=BranchModel,default="",related_name="social_info")
+    company_id = models.ForeignKey(verbose_name='Firma', null=True, blank=True,on_delete=(models.SET_NULL), to=CompanyModel,default="",related_name="social_info")
     objects = CustomManager()
 
     class Meta:
