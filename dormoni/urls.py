@@ -7,12 +7,13 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
- path('', (views.IndexPage.as_view()), name='IndexPage'),
- path('home/', (views.HomePage.as_view()), name='HomePage'),
- path('admin/', admin.site.urls),
- path('authentication/', include('authentication.urls')),
- path('parameters/', include('parameters.urls')),
- path('people/', include('people.urls'))
+    path('', (views.IndexPage.as_view()), name='IndexPage'),
+    path('home/', (views.HomePage.as_view()), name='HomePage'),
+    path('admin/', admin.site.urls),
+    path('authentication/', include('authentication.urls')),
+    path('parameters/', include('parameters.urls')),
+    path('people/', include('people.urls')),
+    path('function/', include('functions.urls'))
   ] + static((settings.MEDIA_URL), document_root=(settings.MEDIA_ROOT)) + static((settings.STATIC_URL), document_root=(settings.STATIC_ROOT))
 
 def handler404(request, exeption):

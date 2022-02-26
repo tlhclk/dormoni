@@ -209,21 +209,11 @@ class ExportData:
             npt.save()
         print('\t\t\t\t\tGüzergah Bilgileri Kaydedildi.')
 
-    def permission_init(self,table_id):
-        pass
-
     def ready(self):
         print('Dışarı Aktarma İşlemi Başladı.')
         if self.app_data:
             self.app_init()
         print('Dışarı Aktarma işlemi Bitti.')
 
-
-class ToExportConfig(AppConfig):
-    name = 'to_export'
-
-    def ready(self):
-        #ExportData().ready()
-        pass
 
 

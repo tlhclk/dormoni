@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'parameters.apps.ParametersConfig',
     'people.apps.PeopleConfig',
     'schema.apps.SchemaConfig',
-    'to_export.apps.ToExportConfig'
 ]
 
 MIDDLEWARE = [
@@ -139,8 +138,8 @@ LOGOUT_URL = '/authentication/logout/'
 import os
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'templates/source')]
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_ROOT = '/home/talhqpxw/dormoni.talhacelik.com/static'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATIC_ROOT = '/home/talhqpxw/dormoni.talhacelik.com/static'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
