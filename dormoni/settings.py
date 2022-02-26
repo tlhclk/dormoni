@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'authentication.apps.AuthenticationConfig',
     'parameters.apps.ParametersConfig',
     'people.apps.PeopleConfig',
-    'schema.apps.SchemaConfig'
+    'schema.apps.SchemaConfig',
+    'to_export.apps.ToExportConfig'
 ]
 
 MIDDLEWARE = [

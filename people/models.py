@@ -3,7 +3,7 @@ from django.db import models
 from parameters.models import GenderModel, CountryModel, CityModel, EmailTypeModel, PhoneTypeModel, MediaTypeModel, PeopleGroupModel
 from authentication.models import CompanyModel,BranchModel
 from datetime import datetime
-from functions.queryset.manager import CustomManager
+from functions.db.manager import CustomManager
 
 class PersonModel(models.Model):
     code = models.CharField(verbose_name='Kodu', null=True, blank=True, max_length=20)

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from functions.queryset.custom_view import CustomListView
+from functions.template.custom_view import CustomListView
 from .models import PersonModel
 
 # Create your views here.

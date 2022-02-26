@@ -111,3 +111,32 @@ class PeopleGroupModel(models.Model):
 
     def __str__(self):
         return '%s' % self.name
+
+
+class AppTypeModel(models.Model):
+    name = models.CharField(verbose_name='Adı', null=True, blank=True, max_length=50)
+    code = models.CharField(verbose_name='Kodu', null=True, blank=True, max_length=50)
+    desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
+
+    class Meta:
+        db_table = 'parameters_apptype'
+        ordering = ['name']
+        verbose_name = 'Uygulama Tipi'
+
+    def __str__(self):
+        return '%s' % self.name
+
+class PathTypeModel(models.Model):
+    name = models.CharField(verbose_name='Adı', null=True, blank=True, max_length=50)
+    code = models.CharField(verbose_name='Kodu', null=True, blank=True, max_length=50)
+    icon_code = models.CharField(verbose_name='Sidebar İcon Kodu', null=True, blank=True, max_length=100)
+    desc = models.CharField(verbose_name='Açıklama', null=True, blank=True, max_length=500)
+
+    class Meta:
+        db_table = 'parameters_pathtype'
+        ordering = ['name']
+        verbose_name = 'Güzergah Tipi'
+
+    def __str__(self):
+        return '%s' % self.name
+

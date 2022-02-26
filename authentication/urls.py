@@ -17,12 +17,23 @@ urlpatterns = [
     path('password_reset/', (auth_views.PasswordResetView.as_view()), name='password_reset'),
     
     #path('new_user/', (views.NewUserView.as_view()), name='NewUserPage'),
+    #list
     path('list/AuthenticationUser',views.ListAuthenticationUser.as_view(),name="List_AuthenticationUser"),
     path('list/AuthenticationGroup',views.ListAuthenticationGroup.as_view(),name="List_AuthenticationGroup"),
     path('list/Branch',views.ListBranch.as_view(),name="List_Branch"),
     path('list/Company',views.ListCompany.as_view(),name="List_Company"),
+    #path('list/UserGroup',views.ListUserGroup.as_view(),name="List_UserGroup"),
+    #path('list/GroupPath',views.ListGroupPath.as_view(),name="List_GroupPath"),
+    #create
     path('create/AuthenticationUser',views.CreateAuthenticationUser.as_view(),name="Create_AuthenticationUser"),
     path('create/AuthenticationGroup',views.CreateAuthenticationGroup.as_view(),name="Create_AuthenticationGroup"),
-    path('create/Branch',views.ListBranch.as_view(),name="Create_Branch"),
-    path('create/Company',views.ListCompany.as_view(),name="Create_Company"),
+    #path('create/Branch',views.CreateBranch.as_view(),name="Create_Branch"),
+    #path('create/Company',views.CreateCompany.as_view(),name="Create_Company"),
+    #path('create/UserGroup',views.CreateUserGroup.as_view(),name="Create_UserGroup"),
+    #path('create/GroupPath',views.CreateGroupPath.as_view(),name="Create_GroupPath"),
+    #detail
+
+    #update
+
+    #delete
  ]

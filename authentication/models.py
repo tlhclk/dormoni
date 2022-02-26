@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import make_password
 from datetime import date
 from django.contrib.auth.models import User
 from schema.models import PathModel
-from functions.queryset.manager import CustomManager
+from functions.db.manager import CustomManager
 
 
 class CompanyModel(models.Model):

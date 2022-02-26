@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import redirect
 from django.views.generic import FormView,ListView,DetailView
-from functions.queryset.custom_view import CustomListView
+from functions.template.custom_view import CustomListView
 from django.contrib.auth.views import LoginView, LogoutView
 from .forms import RegisterForm,AuthenticationUserForm,AuthenticationGroupForm
 from .models import AuthenticationUserModel,AuthenticationGroupModel,BranchModel,CompanyModel,UserGroupModel
