@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from contextlib import nullcontext
 from django.db import models
 from django.contrib.auth.hashers import make_password
 from datetime import date
@@ -85,6 +86,7 @@ class FieldModel(models.Model):
 
 class PathModel(models.Model):
     app_id = models.ForeignKey(verbose_name='Uygulama', null=True, blank=True, on_delete=(models.SET_NULL), to=AppModel)
+    model_id = models.ForeignKey(verbose_name='Tablo', null=True, blank=True, on_delete=(models.SET_NULL), to=TableModel)
     type_id = models.ForeignKey(verbose_name='Güzergah Tipi', null=True, blank=True, on_delete=(models.SET_NULL), to=PathTypeModel)
     title = models.CharField(verbose_name='Başlık',null=True,blank=True,max_length=100)
     path = models.CharField(verbose_name='Güzergah',null=True,blank=True,max_length=200)
@@ -102,33 +104,25 @@ class PathModel(models.Model):
 
     def __str__(self):
         return '%s' % (self.title)
+
+    def save(self, *args,**kwargs):
+        if self.code=="" or self.code ==nullcontext:
+            path_list=PathModel.objects.filter(type_id_id=self.type_id_id).filter(model_id_id=self.model_id_id)
+            code = "%2d-%3d-%3d" % (self.type_id.id|0,self.model_id.id|0,len(path_list)+1)
+            self.code = code
+        return super().save(*args,**kwargs)
     
 
-class ParentPathModel(models.Model):
-    path_id = models.ForeignKey(verbose_name='Güzergah', on_delete=(models.CASCADE), to=PathModel,default="",related_name="parentpath_info")
-    menu_level = models.CharField(verbose_name='Menü Seviyesi',null=True,blank=True,max_length=100)
-    order = models.CharField(verbose_name='Sıra No',null=True,blank=True,max_length=10)
+class SidebarModel(models.Model):
+    path_id = models.ForeignKey(verbose_name='Güzergah', on_delete=(models.CASCADE), to=PathModel,default="",related_name="sidebar_info")
+    name = models.CharField(verbose_name='Adı',null=True,blank=True,max_length=100)
+    menu_code = models.CharField(verbose_name='Menü Kodu',null=True,blank=True,max_length=100)
     desc = models.CharField(verbose_name='Açıklama',null=True,blank=True,max_length=200)
     
     class Meta:
-        db_table = 'schema_parentpath'
-        ordering = ['order']
-        verbose_name = 'Üst Menü Güzergah'
+        db_table = 'schema_sidebar'
+        ordering = ['menu_code']
+        verbose_name = 'Menü Güzergah'
 
     def __str__(self):
-        return '%s' % (str(self.path_id))
-
-class ChildPath(models.Model):
-    parentpath_id = models.ForeignKey(verbose_name='Güzergah', on_delete=(models.CASCADE), to=ParentPathModel,default="",related_name="childpath_info")
-    path_id = models.ForeignKey(verbose_name='Güzergah', on_delete=(models.CASCADE), to=PathModel,default="",related_name="childpath_info")
-    menu_level = models.CharField(verbose_name='Menü Seviyesi',null=True,blank=True,max_length=100)
-    order = models.CharField(verbose_name='Sıra No',null=True,blank=True,max_length=10)
-    desc = models.CharField(verbose_name='Açıklama',null=True,blank=True,max_length=200)
-    
-    class Meta:
-        db_table = 'schema_childpath'
-        ordering = ['order','parentpath_id']
-        verbose_name = 'Alt Menü Güzergah'
-
-    def __str__(self):
-        return '%s > %s' % (str(self.parentpath_id),str(self.path_id))
+        return '%s > %s >%s' % (self.name,self.menu_code,str(self.path_id))

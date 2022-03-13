@@ -4,6 +4,7 @@ from django.utils.deprecation import MiddlewareMixin
 from datetime import datetime
 from django.shortcuts import get_object_or_404
 from schema.models import PathModel
+from django.urls import resolve
 
 
 class PermissionMiddleware(MiddlewareMixin):
@@ -14,32 +15,18 @@ class PermissionMiddleware(MiddlewareMixin):
 	
 	def process_response(self, request, response):
 		path = request.path
-		path_queryset = PathModel.objects.filter(path=path)
-		if len(path_queryset)>0:
+		url_name=resolve(path).url_name
+		path_queryset = PathModel.objects.filter(name=url_name)
+
+		if request.user.is_superuser:
+			return response
+		elif request.user.is_anonymous:
 			if path_queryset[0].code.startswith("00") or 'static' in path or 'media' in path:
 				return response
 			else:
-				if request.user.is_anonymous:
-					return redirect('/authentication/login/')
-				else:
-					return response
+				return redirect('/authentication/login/')
 		else:
-			return redirect('/')
-
-
-		# global_valid_pages_list=['/404', '/500', '/400', '/300', '/', '/authentication/register/', '/authentication/login/', '/authentication/register_validation/',
-		#  '/authentication/password_reset/', '/authentication/password_reset/done/', '/authentication/password_change/', '/authentication/password_change/done/',
-		#  '/authentication/reset/done/', '/authentication/logout/', '']
-		# if request.is_ajax():
-		# 	if request.user.is_anonymous:
-		# 		if path in global_valid_pages_list or 'static' in path or 'media' in path:
-		# 			return response
-		# 		return redirect('/')
-		# else:
-		# 	if request.user.is_anonymous:
-		# 		if path in global_valid_pages_list or 'static' in path or 'media' in path:
-		# 			return response
-		# 		else:
-		# 			return redirect('/authentication/login/')
-		# 	else:
-		# 		return response
+			if len(path_queryset)>0:
+				return response
+			else:
+				return redirect('/')

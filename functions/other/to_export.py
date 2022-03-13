@@ -76,7 +76,7 @@ class ExportData:
             if self.field_data:
                 self.field_init(tm._meta.fields,new_table)
             self.path_init(new_table)
-            self.permission_init(new_table)
+            #self.permission_init(new_table)
         print('\t\t\tTablo Bilgileri Kaydedildi.')
 
     def field_init(self,field_list,table_id):
@@ -157,7 +157,7 @@ class ExportData:
             npc.app_id=table_id.app_id
             npc.type_id_id=9
             npc.title="Yeni %s" % (table_id.form_title)
-            npc.path="/global_view/create/"
+            npc.path="/global_view/create/%s/" % (table_id.name)
             npc.name="crete_%s" % (table_id.name.lower().replace("model",""))
             npc.code="%02d-%03d-c" % (table_id.app_id.id,table_id.id)
             npc.action="Create"
@@ -190,7 +190,7 @@ class ExportData:
             npl.app_id=table_id.app_id
             npl.type_id_id=10
             npl.title="%s" % (table_id.list_title)
-            npl.path="/global_view/list/"
+            npl.path="/global_view/list/%s/" % (table_id.name)
             npl.name="list_%s" % (table_id.name.lower().replace("model",""))
             npl.code="%02d-%03d-l" % (table_id.app_id.id,table_id.id)
             npl.action="List"
